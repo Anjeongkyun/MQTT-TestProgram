@@ -19,6 +19,7 @@ namespace MQTT_Client
     {
         private delegate void myUICallBack(string myStr, TextBox ctl);
         static MqttClient client;
+
         private void myUI(string myStr, TextBox ctl)
         {
             if (this.InvokeRequired)
@@ -98,13 +99,7 @@ namespace MQTT_Client
                     this.AcceptButton = this.PublishButton;
                     label4.Text = "";
                     MessageTextBox.Clear();
-                    SubscribeButton.Enabled = true;
-                    PublishButton.Enabled = true;
-                    UnsubscribeButton.Enabled = true;
-                    DisconnectButton.Enabled = true;
-                    ConnectButton.Enabled = false;
-                    HostTextBox.Enabled = false;
-                    PortTextBox.Enabled = false;                    
+                    controlEnabledSetting(false);                 
                 }
             }
         }
@@ -112,16 +107,21 @@ namespace MQTT_Client
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
             if (client != null && client.IsConnected) client.Disconnect();
-            SubscribeButton.Enabled = false;
-            PublishButton.Enabled = false;
-            UnsubscribeButton.Enabled = false;
-            DisconnectButton.Enabled = false;
-            ConnectButton.Enabled = true;            
-            HostTextBox.Enabled = true;
-            PortTextBox.Enabled = true;
+            controlEnabledSetting(true);
+
             SubListBox.Items.Clear();
         }
 
+        private void controlEnabledSetting(bool isValue)
+        {
+            SubscribeButton.Enabled = !isValue;
+            PublishButton.Enabled = !isValue;
+            UnsubscribeButton.Enabled = !isValue;
+            DisconnectButton.Enabled = !isValue;
+            ConnectButton.Enabled = isValue;
+            HostTextBox.Enabled = isValue;
+            PortTextBox.Enabled = isValue;
+        }
         private void SubscribeButton_Click(object sender, EventArgs e)
         {
             if (SubTopicTextBox.Text.Length == 0)
