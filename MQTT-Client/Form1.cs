@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Net;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace MQTT_Client
 {
@@ -40,10 +42,27 @@ namespace MQTT_Client
             InitializeComponent();
         }
 
+        private void init()
+        {
+            var jsonData = new JObject();
+            jsonData.Add("From", "1234");
+            jsonData.Add("To", "60100001");
+            jsonData.Add("Cmd", 311);
+            jsonData.Add("SEQ", 1);
+            jsonData.Add("0", 2);
+            jsonData.Add("1", 3);
+            jsonData.Add("2", 10000);
+
+            string data = JsonConvert.SerializeObject(jsonData);
+            PubMessageTextBox.Text = data;
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             this.AcceptButton = this.ConnectButton;
             QosComboBox.SelectedIndex = 0;
+
+            init();
+
         }
 
         private void Form1_Closing(object sender, FormClosingEventArgs e)
